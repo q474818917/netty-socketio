@@ -27,6 +27,13 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIONamespace;
 import com.corundumstudio.socketio.misc.CompositeIterable;
 
+
+/**
+ * namespace 持有者、管理者
+ * 1个namespace <==> n个room <==> n个client
+ * @author wangzx
+ *
+ */
 public class NamespacesHub {
 
     private final ConcurrentMap<String, SocketIONamespace> namespaces = PlatformDependent.newConcurrentHashMap();

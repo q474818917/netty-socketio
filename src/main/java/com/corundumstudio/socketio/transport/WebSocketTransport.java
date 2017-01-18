@@ -77,11 +77,11 @@ public class WebSocketTransport extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof CloseWebSocketFrame) {
+        if (msg instanceof CloseWebSocketFrame) {																//请求关闭连接
             ctx.channel().close();
             ReferenceCountUtil.release(msg);
         } else if (msg instanceof BinaryWebSocketFrame
-                    || msg instanceof TextWebSocketFrame) {
+                    || msg instanceof TextWebSocketFrame) {														//二进制请求和文本请求
             ByteBufHolder frame = (ByteBufHolder) msg;
             ClientHead client = clientsBox.get(ctx.channel());
             if (client == null) {
@@ -93,7 +93,7 @@ public class WebSocketTransport extends ChannelInboundHandlerAdapter {
 
             ctx.pipeline().fireChannelRead(new PacketsMessage(client, frame.content(), Transport.WEBSOCKET));
             frame.release();
-        } else if (msg instanceof FullHttpRequest) {
+        } else if (msg instanceof FullHttpRequest) {															//http请求，用于握手
             FullHttpRequest req = (FullHttpRequest) msg;
             QueryStringDecoder queryDecoder = new QueryStringDecoder(req.uri());
             String path = queryDecoder.path();
@@ -145,13 +145,20 @@ public class WebSocketTransport extends ChannelInboundHandlerAdapter {
         }
         super.channelInactive(ctx);
     }
-
+    
+    /**
+     * 处理握手
+     * @param ctx
+     * @param sessionId:客户端sessionID
+     * @param path
+     * @param req
+     */
     private void handshake(ChannelHandlerContext ctx, final UUID sessionId, String path, FullHttpRequest req) {
         final Channel channel = ctx.channel();
 
         WebSocketServerHandshakerFactory factory =
                 new WebSocketServerHandshakerFactory(getWebSocketLocation(req), null, true, configuration.getMaxFramePayloadLength());
-        WebSocketServerHandshaker handshaker = factory.newHandshaker(req);
+        WebSocketServerHandshaker handshaker = factory.newHandshaker(req);				//根据版本号，建立WebSocketServerHandshaker
         if (handshaker != null) {
             ChannelFuture f = handshaker.handshake(channel, req);
             f.addListener(new ChannelFutureListener() {
@@ -203,7 +210,12 @@ public class WebSocketTransport extends ChannelInboundHandlerAdapter {
 
         log.debug("сlient {} handshake completed", sessionId);
     }
-
+    
+    /**
+     * 构建协议头
+     * @param req
+     * @return
+     */
     private String getWebSocketLocation(HttpRequest req) {
         String protocol = "ws://";
         if (isSsl) {

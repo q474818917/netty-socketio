@@ -8,6 +8,12 @@ Checkout [Demo project](https://github.com/mrniko/netty-socketio-demo)
 
 Licensed under the Apache License 2.0.
 
+改动：
+================================
+~~为了测试连接socketio服务器，引入socket.io-client.jar[scoket.io-client](https://github.com/socketio/socket.io-client-java)包~~
+现已改为android客户端连接
+ + netty使用的4.1.5
+
 
 Features
 ================================
@@ -40,7 +46,7 @@ Customer feedback in __2014__:
 
 Projects using netty-socketio
 ================================
-AVOS Cloud: [avoscloud.com](https://avoscloud.com/)  
+AVOS Cloud, 现已变为LeanCloud,因域名中带av，中国团队开发 : [avoscloud.com](https://avoscloud.com/) 
 Bingo Crack: [bingocrack.com](http://bingocrack.com/)  
 Kambi Sports Solutions: [kambi.com](http://kambi.com/)  
 ARSnova: [arsnova.eu](https://arsnova.eu)  

@@ -24,6 +24,11 @@ import java.util.Map;
 
 import io.netty.handler.codec.http.HttpHeaders;
 
+/**
+ * 握手协议封装
+ * @author wangzx
+ *
+ */
 public class HandshakeData implements Serializable {
 
     private static final long serialVersionUID = 1196350300161819978L;

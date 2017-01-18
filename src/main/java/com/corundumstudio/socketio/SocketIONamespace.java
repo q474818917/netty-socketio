@@ -22,7 +22,8 @@ import com.corundumstudio.socketio.listener.ClientListeners;
 
 /**
  * Fully thread-safe.
- *
+ * 
+ * namespace由于继承clientListeners，也是有三个事件：connect、disconnect、event的监听的
  */
 public interface SocketIONamespace extends ClientListeners {
 

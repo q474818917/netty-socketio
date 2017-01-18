@@ -26,6 +26,12 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.namespace.Namespace;
 
+/**
+ * 总共扫描三个事件：onConnect、onDisconnect、onEvent
+ * 
+ * @author wangzx
+ *
+ */
 public class ScannerEngine {
 
     private static final Logger log = LoggerFactory.getLogger(ScannerEngine.class);

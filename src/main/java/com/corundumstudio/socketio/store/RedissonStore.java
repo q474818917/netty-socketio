@@ -22,7 +22,7 @@ import org.redisson.api.RedissonClient;
 
 public class RedissonStore implements Store {
 
-    private final Map<String, Object> map;
+    private final Map<String, Object> map;								//服务启动时，该map就已经实例化好了
 
     public RedissonStore(UUID sessionId, RedissonClient redisson) {
         this.map = redisson.getMap(sessionId.toString());

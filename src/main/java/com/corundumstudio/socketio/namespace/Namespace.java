@@ -64,8 +64,8 @@ public class Namespace implements SocketIONamespace {
     private final Queue<DisconnectListener> disconnectListeners = new ConcurrentLinkedQueue<DisconnectListener>();
 
     private final Map<UUID, SocketIOClient> allClients = PlatformDependent.newConcurrentHashMap();
-    private final ConcurrentMap<String, Set<UUID>> roomClients = PlatformDependent.newConcurrentHashMap();
-    private final ConcurrentMap<UUID, Set<String>> clientRooms = PlatformDependent.newConcurrentHashMap();
+    private final ConcurrentMap<String, Set<UUID>> roomClients = PlatformDependent.newConcurrentHashMap();		//一个room下的很多client
+    private final ConcurrentMap<UUID, Set<String>> clientRooms = PlatformDependent.newConcurrentHashMap();		//一个client加入多个room
 
     private final String name;
     private final AckMode ackMode;
@@ -277,12 +277,12 @@ public class Namespace implements SocketIONamespace {
         Set<V> clients = map.get(key);
         if (clients == null) {
             clients = Collections.newSetFromMap(PlatformDependent.<V, Boolean>newConcurrentHashMap());
-            Set<V> oldClients = map.putIfAbsent(key, clients);
+            Set<V> oldClients = map.putIfAbsent(key, clients);												//原先的clients
             if (oldClients != null) {
                 clients = oldClients;
             }
         }
-        clients.add(value);
+        clients.add(value);																					//添加新value后的clients
         // object may be changed due to other concurrent call
         if (clients != map.get(key)) {
             // re-join if queue has been replaced
@@ -291,8 +291,8 @@ public class Namespace implements SocketIONamespace {
     }
 
     public void join(String room, UUID sessionId) {
-        join(roomClients, room, sessionId);
-        join(clientRooms, sessionId, room);
+        join(roomClients, room, sessionId);																	//room中添加client
+        join(clientRooms, sessionId, room);																	//client中添加room
     }
 
     public void leaveRoom(String room, UUID sessionId) {

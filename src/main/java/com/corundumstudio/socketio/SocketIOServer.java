@@ -60,7 +60,11 @@ public class SocketIOServer implements ClientListeners {
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
-
+    
+    /**
+     * 初始化默认的主namespace
+     * @param configuration
+     */
     public SocketIOServer(Configuration configuration) {
         this.configuration = configuration;
         this.configCopy = new Configuration(configuration);
@@ -125,6 +129,7 @@ public class SocketIOServer implements ClientListeners {
 
     /**
      * Start server asynchronously
+     * 异步启动
      */
     public Future<Void> startAsync() {
         log.info("Session store / pubsub factory used: {}", configCopy.getStoreFactory());
@@ -159,7 +164,11 @@ public class SocketIOServer implements ClientListeners {
             }
         });
     }
-
+    
+    /**
+     * netty 设置channelOption
+     * @param bootstrap
+     */
     protected void applyConnectionOptions(ServerBootstrap bootstrap) {
         SocketConfig config = configCopy.getSocketConfig();
         bootstrap.childOption(ChannelOption.TCP_NODELAY, config.isTcpNoDelay());
@@ -176,7 +185,10 @@ public class SocketIOServer implements ClientListeners {
         bootstrap.option(ChannelOption.SO_REUSEADDR, config.isReuseAddress());
         bootstrap.option(ChannelOption.SO_BACKLOG, config.getAcceptBackLog());
     }
-
+    
+    /**
+     * 是否使用linux原生的epoll
+     */
     protected void initGroups() {
         if (configCopy.isUseLinuxNativeEpoll()) {
             bossGroup = new EpollEventLoopGroup(configCopy.getBossThreads());
@@ -197,11 +209,21 @@ public class SocketIOServer implements ClientListeners {
         pipelineFactory.stop();
         log.info("SocketIO server stopped");
     }
-
+    
+    /**
+     * server新增namespace
+     * @param name
+     * @return
+     */
     public SocketIONamespace addNamespace(String name) {
         return namespacesHub.create(name);
     }
-
+    
+    /**
+     * server获取namespace
+     * @param name
+     * @return
+     */
     public SocketIONamespace getNamespace(String name) {
         return namespacesHub.get(name);
     }

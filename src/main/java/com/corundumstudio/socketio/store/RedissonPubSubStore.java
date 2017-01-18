@@ -30,6 +30,11 @@ import com.corundumstudio.socketio.store.pubsub.PubSubType;
 
 import io.netty.util.internal.PlatformDependent;
 
+/**
+ * redis 消息订阅与分发
+ * @author wangzx
+ *
+ */
 public class RedissonPubSubStore implements PubSubStore {
 
     private final RedissonClient redissonPub;
@@ -54,10 +59,10 @@ public class RedissonPubSubStore implements PubSubStore {
     public <T extends PubSubMessage> void subscribe(PubSubType type, final PubSubListener<T> listener, Class<T> clazz) {
         String name = type.toString();
         RTopic<T> topic = redissonSub.getTopic(name);
-        int regId = topic.addListener(new MessageListener<T>() {
+        int regId = topic.addListener(new MessageListener<T>() {					//当有message publish到这个topic上，就会执行onMessage方法
             @Override
             public void onMessage(String channel, T msg) {
-                if (!nodeId.equals(msg.getNodeId())) {
+                if (!nodeId.equals(msg.getNodeId())) {								//nodeId按jvm节点区分，或者按照store类型区分
                     listener.onMessage(msg);
                 }
             }

@@ -33,6 +33,11 @@ import com.corundumstudio.socketio.namespace.Namespace;
 import com.corundumstudio.socketio.protocol.Packet;
 import com.corundumstudio.socketio.protocol.PacketType;
 
+/**
+ * client ID 在这里存储，支持redis、hazelcast
+ * @author wangzx
+ *
+ */
 public class NamespaceClient implements SocketIOClient {
 
     private static final Logger log = LoggerFactory.getLogger(NamespaceClient.class);
